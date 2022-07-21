@@ -1,31 +1,19 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
-	"sipulsa-be/models"
-	"sipulsa-be/repository"
-
-	"github.com/labstack/echo"
+	database "sipulsa-be/databases"
+	"sipulsa-be/routes"
 )
 
 func main() {
-	e := echo.New()
+	e := routes.Init()
 
-	e.GET("/", func(ctx echo.Context) error {
-		var UserTemp []models.UserTemp
+	err := database.IsConnectedToDb()
+	if err != nil {
+		panic("database not connected")
+	}
 
-		UserTemp = repository.FindAllMember()
-
-		users, err := json.Marshal(UserTemp)
-
-		if err != nil {
-			log.Println(err.Error())
-		}
-
-		return ctx.String(http.StatusOK, string(users))
-	})
+	routes.Init()
 
 	e.Start(":8089")
 }

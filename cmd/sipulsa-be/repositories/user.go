@@ -1,8 +1,8 @@
-package repository
+package repositories
 
 import (
 	"log"
-	"sipulsa-be/database"
+	database "sipulsa-be/databases"
 	"sipulsa-be/models"
 )
 
@@ -16,7 +16,7 @@ func FindAllMember() []models.UserTemp {
 	}
 
 	var userTemps []models.UserTemp
-	errQ := trx.Model(userTemps).ColumnExpr("*").Select()
+	errQ := trx.Model(&userTemps).ColumnExpr("*").Select()
 
 	if errQ != nil {
 		log.Println(errQ.Error())

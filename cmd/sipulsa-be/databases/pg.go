@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"log"
 
 	"github.com/go-pg/pg/v10"
 )
@@ -18,14 +17,18 @@ func Connection() *pg.DB {
 	}
 	pgCon := pg.Connect(&dbOpt)
 
-	ctx := context.Background()
-
-	if err := pgCon.Ping(ctx); err != nil {
-		panic(err)
-	}
-
-	log.Println("connected to database")
-
 	return pgCon
 
+}
+
+func IsConnectedToDb() error {
+	db := Connection()
+
+	ctx := context.Background()
+
+	if err := db.Ping(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
