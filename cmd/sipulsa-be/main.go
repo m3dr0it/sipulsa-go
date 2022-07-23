@@ -13,7 +13,5 @@ func main() {
 		panic("database not connected")
 	}
 
-	routes.Init()
-
 	e.Start(":8089")
 }

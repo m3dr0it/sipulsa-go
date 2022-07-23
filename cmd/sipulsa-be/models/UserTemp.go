@@ -3,11 +3,13 @@ package models
 import (
 	"database/sql"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserTemp struct {
-	tableName                struct{}       `pg:"user_temp"`
-	Id                       int            `pg:"id"`
+	gorm.Model
+	Id                       int            `gorm:PrimaryKey`
 	Name                     string         `pg:"name"`
 	Username                 string         `pg:"username"`
 	PhoneNumber              string         `pg:"phone_number"`
@@ -19,6 +21,6 @@ type UserTemp struct {
 	UpdatedBy                sql.NullString `pg:"updated_by"`
 	DeletedAt                sql.NullTime   `pg:"deleted_at"`
 	DeletedBy                sql.NullString `pg:"deleted_by"`
-	Otp                      int            `pg:"otp"`
+	Otp                      string         `pg:"otp"`
 	OtpExpired               time.Time      `pg:"otp_expired"`
 }

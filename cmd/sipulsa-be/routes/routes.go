@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"sipulsa-be/controllers"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func Init() *echo.Echo {
@@ -16,6 +16,7 @@ func Init() *echo.Echo {
 	})
 
 	e.GET("/users", controllers.FindAllUserTemp)
+	e.POST("/user", controllers.AddNewUserTemp)
 
 	return e
 }

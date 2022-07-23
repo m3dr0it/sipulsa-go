@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 
-	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg"
 )
 
 func Connection() *pg.DB {
