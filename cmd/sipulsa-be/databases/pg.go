@@ -1,32 +1,33 @@
 package database
 
 import (
-	"context"
-
-	"github.com/go-pg/pg"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func Connection() *pg.DB {
-	dbOpt := pg.Options{
-		Network:         "tcp",
-		Addr:            "localhost:5433",
-		ApplicationName: "sipulsa-go",
-		User:            "root",
-		Password:        "H8dVeZYjv66xfXbq",
-		Database:        "sipulsa",
+func Connection() *gorm.DB {
+
+	dsn := "host=localhost user=root password=H8dVeZYjv66xfXbq dbname=sipulsa port=5433 sslmode=disable TimeZone=Asia/Shanghai"
+
+	pgCon, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		panic(err)
 	}
-	pgCon := pg.Connect(&dbOpt)
 
 	return pgCon
 
 }
 
 func IsConnectedToDb() error {
-	db := Connection()
+	con := Connection()
+	db, err := con.DB()
 
-	ctx := context.Background()
+	if err != nil {
+		panic(err)
+	}
 
-	if err := db.Ping(ctx); err != nil {
+	if err := db.Ping(); err != nil {
 		return err
 	}
 

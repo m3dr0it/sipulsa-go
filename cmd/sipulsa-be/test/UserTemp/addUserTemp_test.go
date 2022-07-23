@@ -2,10 +2,9 @@ package usertemp_test
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"net/http"
-	"sipulsa-be/models"
+	models "sipulsa-be/models/pg"
 	"sipulsa-be/models/responses"
 	"testing"
 )
@@ -14,11 +13,10 @@ func TestAddUserTemp(t *testing.T) {
 	var baseUrl = "http://localhost:8089/user"
 
 	var body = models.UserTemp{
-		Name:                     "Mardiana",
-		Username:                 "medr0it",
-		PhoneNumber:              "082125573465",
-		Email:                    "madaresdhee@gmail.com",
-		RegisteredByReferralCode: sql.NullString{Valid: false},
+		Name:        "Mardiana",
+		Username:    "medr0it",
+		PhoneNumber: "082125573465",
+		Email:       "madaresdhee@gmail.com",
 	}
 
 	jsonBody, errJsonBody := json.Marshal(body)

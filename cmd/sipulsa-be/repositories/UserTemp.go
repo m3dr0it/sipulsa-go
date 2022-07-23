@@ -1,69 +1,87 @@
 package repositories
 
 import (
+	"database/sql"
+	"errors"
 	"log"
 	database "sipulsa-be/databases"
-	"sipulsa-be/models"
-	"sipulsa-be/models/requests"
-	"sipulsa-be/utilities/otp"
-	"time"
+	models "sipulsa-be/models/pg"
 
-	"github.com/go-pg/pg"
+	"gorm.io/gorm"
 )
 
-var pgcon = new(pg.DB)
+var pgcon = new(gorm.DB)
+var db = &sql.DB{}
 
 func init() {
 	pgcon = database.Connection()
+
 }
 
 func FindAllUserTemps() []models.UserTemp {
-	trx, err := pgcon.Begin()
-	defer trx.Close()
-
-	if err != nil {
-		log.Println(err.Error())
-	}
-
 	var userTemps []models.UserTemp
-	errQ := trx.Model(&userTemps).ColumnExpr("*").Select()
 
-	if errQ != nil {
-		log.Println(errQ.Error())
+	result := pgcon.Find(&userTemps)
+	if result.Error != nil {
+		log.Println(result.Error)
 	}
-
-	log.Println(userTemps)
-
-	log.Println(pgcon)
 
 	return userTemps
 }
 
-func AddUserTemp(ut requests.NewUserTemp) {
-	trx, err := pgcon.Begin()
-	defer trx.Close()
+func AddUserTemp(userTemp models.UserTemp) error {
 
-	if err != nil {
-		log.Println(err.Error())
+	result := pgcon.Create(&userTemp)
+
+	if result != nil {
+		log.Println(result)
+		return result.Error
 	}
 
-	userTemp := &models.UserTemp{
-		Name:                     ut.Name,
-		Username:                 ut.Username,
-		Email:                    ut.Email,
-		Otp:                      otp.GenerateOtp(),
-		OtpExpired:               time.Now().Add(time.Duration(time.Minute.Minutes() * 5)),
-		CreatedAt:                time.Now(),
-		RegisteredByReferralCode: ut.ReferralCode,
-		PhoneNumber:              ut.PhoneNumber,
-		CreatedBy:                "System",
+	return nil
+}
+
+func IsExistsByUsername(username string) (bool, error) {
+	var isUserTempExists int64
+
+	var userTemp models.UserTemp
+
+	pgcon.Where(&models.UserTemp{Username: username}).
+		Find(&userTemp).Count(&isUserTempExists)
+
+	if isUserTempExists > 0 {
+		return true, errors.New(username + " exists")
+	} else {
+		return false, nil
 	}
+}
 
-	insert, errInsert := trx.Model(userTemp).Insert()
+func IsExistsByPhoneNumber(phoneNumber string) (bool, error) {
+	var isUserTempExists int64
 
-	log.Println(insert)
+	var userTemp models.UserTemp
 
-	if errInsert != nil {
-		log.Println(errInsert)
+	pgcon.Where(&models.UserTemp{PhoneNumber: phoneNumber}).
+		Find(&userTemp).Count(&isUserTempExists)
+
+	if isUserTempExists > 0 {
+		return true, errors.New(phoneNumber + " exists")
+	} else {
+		return false, nil
+	}
+}
+
+func IsExistsByEmail(mail string) (bool, error) {
+	var isUserTempExists int64
+
+	var userTemp models.UserTemp
+
+	pgcon.Where(&models.UserTemp{Email: mail}).
+		Find(&userTemp).Count(&isUserTempExists)
+
+	if isUserTempExists > 0 {
+		return true, errors.New(mail + " exists")
+	} else {
+		return false, nil
 	}
 }

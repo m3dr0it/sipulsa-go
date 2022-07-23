@@ -6,18 +6,54 @@ import (
 )
 
 type Response struct {
-	Timestamp  time.Time
-	StatusCode int32
-	Message    string
-	Content    any
+	Timestamp  time.Time `json:"timestamp"`
+	StatusCode int32     `json:"status_code"`
+	Message    string    `json:"message"`
+	Content    any       `json:"content"`
 }
 
-func CreateResponse(data any) Response {
+func PaginationResponse() {
+
+}
+
+func OkResponse(data any) Response {
 	res := Response{
 		Timestamp:  time.Now(),
-		Message:    "null",
-		StatusCode: http.StatusFound,
+		StatusCode: http.StatusOK,
 		Content:    data,
+	}
+
+	return res
+}
+
+func CreatedResponse(data any) Response {
+	res := Response{
+		Timestamp:  time.Now(),
+		Message:    "created",
+		StatusCode: http.StatusCreated,
+		Content:    data,
+	}
+
+	return res
+}
+
+func ErrorResponse(err error) Response {
+	res := Response{
+		Timestamp:  time.Now(),
+		Message:    err.Error(),
+		StatusCode: http.StatusInternalServerError,
+		Content:    nil,
+	}
+
+	return res
+}
+
+func ConflictResponse(err error) Response {
+	res := Response{
+		Timestamp:  time.Now(),
+		Message:    err.Error(),
+		StatusCode: http.StatusInternalServerError,
+		Content:    nil,
 	}
 
 	return res
