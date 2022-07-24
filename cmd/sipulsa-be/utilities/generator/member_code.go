@@ -1,8 +1,8 @@
-package referralcode
+package generator
 
 import "math/rand"
 
-func generateReferralCode() string {
+func GenerateMemberCode() string {
 	length := 8
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 

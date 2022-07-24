@@ -14,6 +14,7 @@ const CONFIG_AUTH_EMAIL = "amdtkj@gmail.com"
 const CONFIG_AUTH_PASSWORD = "ljwqqghofjwbrfng"
 
 func Mail(m MailTemplate) {
+
 	to := m.MailTo
 	cc := m.MailCc
 	subject := m.Subject
@@ -24,7 +25,6 @@ func Mail(m MailTemplate) {
 		log.Println("not sent")
 	}
 	log.Println("Mail sent!")
-
 }
 
 func sendMail(to []string, cc []string, subject, message string) error {

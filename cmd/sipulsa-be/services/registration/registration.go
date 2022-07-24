@@ -8,11 +8,9 @@ import (
 	mailservice "sipulsa-be/utilities/mail"
 	"sipulsa-be/utilities/otp"
 	"time"
-
-	"github.com/labstack/echo/v4"
 )
 
-func Register(c echo.Context, ut *requests.NewUserTemp) error {
+func Register(ut *requests.NewUserTemp) error {
 
 	isExistsByUsername, err := repositories.IsExistsByUsername(ut.Username)
 
@@ -54,8 +52,6 @@ func Register(c echo.Context, ut *requests.NewUserTemp) error {
 	}
 
 	go mailservice.Mail(m)
-
-	time.Sleep(time.Millisecond * 100)
 
 	errSave := repositories.AddUserTemp(userTemp)
 

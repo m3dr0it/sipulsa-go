@@ -25,19 +25,32 @@ func FindAllUserTemp(ec echo.Context) error {
 
 func AddNewUserTemp(c echo.Context) error {
 	ut := new(requests.NewUserTemp)
-	err := c.Bind(ut)
 
-	if err != nil {
-		log.Println(err.Error())
+	if err := c.Bind(ut); err != nil {
+		return echo.ErrInternalServerError
 	}
 
-	errService := registration.Register(c, ut)
+	if err := c.Validate(ut); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	errService := registration.Register(ut)
 
 	if errService != nil {
 		c.JSON(http.StatusConflict, responses.ConflictResponse(errService))
 	} else {
-		c.JSON(http.StatusCreated, responses.CreatedResponse(nil))
+		c.JSON(http.StatusCreated, responses.CreatedResponse("otp send to email"))
+	}
 
+	return nil
+}
+
+func ValidateOtp(c echo.Context) error {
+	ut := new(requests.NewUserTemp)
+	err := c.Bind(ut)
+
+	if err != nil {
+		log.Println(err.Error())
 	}
 
 	return nil

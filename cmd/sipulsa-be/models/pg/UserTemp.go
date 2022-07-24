@@ -18,6 +18,7 @@ type UserTemp struct {
 	UpdatedBy                sql.NullString
 	DeletedAt                sql.NullTime
 	DeletedBy                sql.NullString
+	IsDeleted                bool
 	Otp                      string
 	OtpExpired               time.Time
 }

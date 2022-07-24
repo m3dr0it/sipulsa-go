@@ -46,7 +46,9 @@ func IsExistsByUsername(username string) (bool, error) {
 
 	var userTemp models.UserTemp
 
-	pgcon.Where(&models.UserTemp{Username: username}).
+	pgcon.Where(&models.UserTemp{
+		Username: username, IsDeleted: false,
+	}).
 		Find(&userTemp).Count(&isUserTempExists)
 
 	if isUserTempExists > 0 {
@@ -61,7 +63,8 @@ func IsExistsByPhoneNumber(phoneNumber string) (bool, error) {
 
 	var userTemp models.UserTemp
 
-	pgcon.Where(&models.UserTemp{PhoneNumber: phoneNumber}).
+	pgcon.Where(&models.UserTemp{PhoneNumber: phoneNumber,
+		IsDeleted: false}).
 		Find(&userTemp).Count(&isUserTempExists)
 
 	if isUserTempExists > 0 {
@@ -76,7 +79,7 @@ func IsExistsByEmail(mail string) (bool, error) {
 
 	var userTemp models.UserTemp
 
-	pgcon.Where(&models.UserTemp{Email: mail}).
+	pgcon.Where(&models.UserTemp{Email: mail, IsDeleted: false}).
 		Find(&userTemp).Count(&isUserTempExists)
 
 	if isUserTempExists > 0 {
@@ -84,4 +87,26 @@ func IsExistsByEmail(mail string) (bool, error) {
 	} else {
 		return false, nil
 	}
+}
+func IsExistsByUsernameEmailPhoneOtp(username string,
+	email string, phone string, otp string) (models.UserTemp, error) {
+
+	var isUserTempExists int64
+
+	var userOtp models.UserTemp
+
+	pgcon.Where(&models.UserTemp{
+		Username:    username,
+		Email:       email,
+		PhoneNumber: phone,
+		Otp:         otp,
+		IsDeleted:   false,
+	}).Find(&userOtp).Count(&isUserTempExists)
+
+	if isUserTempExists > 0 {
+		return userOtp, nil
+	} else {
+		return userOtp, errors.New("Kode Otp Salah")
+	}
+
 }
