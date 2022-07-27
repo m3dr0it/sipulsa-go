@@ -7,6 +7,9 @@ import (
 )
 
 func initUserRoutes(baseApi string, e *echo.Echo) {
-	e.POST(baseApi+"/register", controllers.AddNewUserTemp)
+	var baseUserApi = baseApi + "/user"
+
+	e.POST(baseUserApi+"/register", controllers.AddNewUserTemp)
+	e.GET(baseUserApi+"/all", controllers.FindAllUserTemp)
 	// e.POST(baseApi + "/validate")
 }
