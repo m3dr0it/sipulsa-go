@@ -7,7 +7,7 @@ import (
 
 func Connection() *gorm.DB {
 
-	dsn := "host=localhost user=root password=H8dVeZYjv66xfXbq dbname=sipulsa port=5433 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=103.187.147.86 user=root password=H8dVeZYjv66xfXbq dbname=sipulsa port=5433 sslmode=disable TimeZone=Asia/Shanghai"
 
 	pgCon, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 

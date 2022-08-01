@@ -12,12 +12,12 @@ func Init() *echo.Echo {
 
 	e := echo.New()
 
+	InitRegistrationRoutes(baseApi, e)
+
 	e.GET("/", func(ctx echo.Context) error {
 		ctx.String(http.StatusOK, "Tes")
 		return nil
 	})
-
-	initUserRoutes(baseApi, e)
 
 	return e
 }
